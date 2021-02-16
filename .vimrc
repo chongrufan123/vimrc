@@ -29,6 +29,9 @@ set hlsearch        "搜索时高亮显示匹配
 set incsearch       "搜索时每输入一个字符自动跳转
 set ignorecase      "搜索时忽略大小写
 
+
+set clipboard=unnamed   
+nnoremap <esc><esc> :noh<return><esc>
 "set spell    "打开英语拼音拼写检查
 set undofile        "保存撤销历史，可以保存上一次的操作历史
 set backupdir=~/.vim/.backup//  "备份文件路径
@@ -50,6 +53,9 @@ set mat=5       "匹配括号时间0.5s
 set langmenu=zh_CN.UTF-8
 language message zh_CN.UTF-8
 
+inoremap <c-u> <c-g>u<c-u>
+inoremap <c-w> <c-g>u<c-w>
+
 set encoding=utf-8
 nmap <CR> o<ESC>
 autocmd BufReadPost *
@@ -64,11 +70,9 @@ autocmd InsertLeave,WinEnter * set cursorline
 autocmd InsertEnter,WinLeave * set nocursorline
 inoremap :: <esc>:
 set relativenumber
-nmap " 0i"<esc>x
 set noautoindent
-inoremap <c-o> <esc>o
 set shiftwidth=4
-
+set backspace=indent,eol,start
 
 """"""""""""""""""""""""""""""""""""""""""""""""""
 """"""""""""""""""""""vimdle 配置"""""""""""""""""
@@ -85,7 +89,10 @@ Plugin 'luochen1990/rainbow'
 Plugin 'ycm-core/YouCompleteMe'
 
 Plugin 'preservim/nerdtree'
-"Plugin 'Valloric/YouCompleteMe'
+
+Plugin 'junegunn/vim-peekaboo'
+
+Plugin 'simnalamburt/vim-mundo'
 " 你的所有插件需要在下面这行之前
 call vundle#end()            " 必须
 filetype plugin indent on    " 必须 加载vim自带和插件相应的语法和文件类型相关脚本
@@ -138,3 +145,15 @@ let g:ycm_filetype_whitelist = {
 map <C-n> :NERDTreeToggle<CR>
 """"""""""""""""""""""""""""""""""""""""""""""""""
 """""""""""""""""""""""""""""""""""""""""""""""""""
+
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""
+"""""""""""""""""""""""mundo 配置"""""""""""""""""
+" Enable persistent undo so that undo history persists across vim sessions
+set undofile
+set undodir=~/.vim/undo
+
+""""""""""""""""""""""""""""""""""""""""""""""""""
+"""""""""""""""""""""""""""""""""""""""""""""""""
+
