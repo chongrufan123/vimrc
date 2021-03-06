@@ -1,4 +1,3 @@
-set nocompatible	"不与VI兼容
 syntax on		"语法高亮
 set showmode		"在底部显示，当前是命令还是插入
 set showcmd		"在底部显示命令
@@ -54,6 +53,9 @@ set mat=5       "匹配括号时间0.5s
 set langmenu=zh_CN.UTF-8
 language message zh_CN.UTF-8
 
+inoremap , , 
+inoremap >> <esc>>>A
+inoremap << <esc><<A
 inoremap <c-h> <Left>
 inoremap <c-j> <Down>
 inoremap <c-k> <Up>
@@ -110,38 +112,42 @@ au InsertEnter * call Fcitx2zh()
 "新建.md,.py,.sh文件，自动插入文件头 
 autocmd BufNewFile *.py exec ":call SetTitle()" 
 ""定义函数SetTitle，自动插入文件头 
-func SetTitle() 
+func! SetTitle() 
     call setline(1, "###************************************************************************") 
     call append(line("."), "	# File Name: ".expand("%")) 
     call append(line(".")+1, "	# Author: Fan Chongru") 
     call append(line(".")+2, "	# Mail: chongrufan123@gmail.com") 
     call append(line(".")+3, "	# Created Time: ".strftime("%c")) 
-    call append(line(".")+4, "###***********************************************************************") 
-    call append(line(".")+5, "")
+    call append(line(".")+4, "  # notes: ") 
+    call append(line(".")+5, "###***********************************************************************") 
+    call append(line(".")+6, "")
 endfunc 
 
 autocmd BufNewFile *.md exec ":call MetTitle()" 
 ""定义函数SetTitle，自动插入文件头 
-func MetTitle() 
+func! MetTitle() 
     call setline(1, "---------------------------------------------------------------------------") 
     call append(line("."), "	 File Name: ".expand("%")) 
     call append(line(".")+1, "	 Author: Fan Chongru") 
     call append(line(".")+2, "	 Mail: chongrufan123@gmail.com") 
     call append(line(".")+3, "	 Created Time: ".strftime("%c")) 
-    call append(line(".")+4, " --------------------------------------------------------------------------") 
-    call append(line(".")+5, "")
+    call append(line(".")+4, "	 notes: ") 
+    call append(line(".")+5, " --------------------------------------------------------------------------") 
+    call append(line(".")+6, "")
 endfunc 
 
 autocmd BufNewFile *.sh exec ":call Mdtitle()" 
-func Mdtitle()
+func! Mdtitle()
     call setline(1, "##########################################################################") 
     call append(line("."), "# File Name: ".expand("%")) 
     call append(line(".")+1, "# Author: Fan Chongru") 
     call append(line(".")+2, "# mail: chongrufan123@gmail.com") 
     call append(line(".")+3, "# Created Time: ".strftime("%c")) 
-    call append(line(".")+4, "#########################################################################") 
-    call append(line(".")+5, "#!/bin/Bash")
-    call append(line(".")+6, "")
+    call append(line(".")+4, "# notes: ") 
+    call append(line(".")+5, "# permission: ") 
+    call append(line(".")+6, "#########################################################################") 
+    call append(line(".")+7, "#!/bin/Bash")
+    call append(line(".")+8, "")
 endfunc
 """"""""""""""""""""""""""""""""""""""""""""""""""
 """"""""""""""""""""""vimdle 配置"""""""""""""""""
@@ -164,7 +170,6 @@ Plugin 'junegunn/vim-peekaboo'
 Plugin 'simnalamburt/vim-mundo'
 
 Plugin 'mzlogin/vim-markdown-toc'
-
 Plugin 'plasticboy/vim-markdown'
 
 Plugin 'iamcco/markdown-preview.nvim'
@@ -249,7 +254,7 @@ endif
 """"""""""""""""""""""""""""""""""""""""""""""""""
 """"""""""""""""""""""toc插件""""""""""""""""""""""
 
-function RToc()
+function! RToc()
     exe "/-toc .* -->"
     let lstart=line('.')
     exe "/-toc -->"
