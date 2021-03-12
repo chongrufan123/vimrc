@@ -39,7 +39,8 @@ set directory=~/.vim/.swp//     "交换文件路径
 set undodir=~/.vim/.undo//      "操作历史文件保存路径
 set autochdir                   "自动切换工作目录
 set noerrorbells                "出错时不要发出响声
-set novisualbell                  "出错时发出视觉提示
+set visualbell                  "出错时发出视觉提示
+set vb t_vb=
 set history=1000                "记住1000次历史操作
 set autoread                    "打开外部监视
 set wildmenu
@@ -62,8 +63,14 @@ inoremap <c-k> <Up>
 inoremap <c-l> <Right>
 nnoremap 0 ^
 nnoremap - g_
+nnoremap zishu :set nohlsearch<cr>:%s/./&/g<cr>
 set foldmethod=manual
 set foldlevelstart=99
+
+function! MySearch()
+    PluginInstall
+endfunction
+command! Search call MySearch()
 
 set encoding=utf-8
 nmap <CR> o<ESC>
@@ -85,30 +92,18 @@ set shiftwidth=4
 set backspace=indent,eol,start
 let g:vim_markdown_math = 1
 
-" 自动转变中英文输入法
-function! Fcitx2en()
-    let input_status = system('fcitx-remote')
-    if input_status == 2
-        let b:inputtoggle = 1
-        call system('fcitx-remote -c')
-    endif
-endfunction
-function! Fcitx2zh()
-    try
-	if b:inputtoggle == 1
-	    call system('fcitx-remote -o')
-	    let b:inputtoggle = 0
-	endif
-    catch /inputtoggle/
-        let b:inputtoggle = 0
-    endtry
-endfunction
-" Autocmds:
-au InsertLeave * call Fcitx2en()
-au InsertEnter * call Fcitx2zh()
+func! HtmlTitle() 
+    call setline(1, "<!--***********************************************************************") 
+    call append(line("."), "	# File Name: ".expand("%")) 
+    call append(line(".")+1, "	# Author: Fan Chongru") 
+    call append(line(".")+2, "	# Mail: chongrufan123@gmail.com") 
+    call append(line(".")+3, "	# Created Time: ".strftime("%c")) 
+    call append(line(".")+4, "  # notes: ") 
+    call append(line(".")+5, "**********************************************************************-->") 
+    call append(line(".")+6, "")
+    inoremap !<tab> <html lang="en"><cr><head><cr><meta charset="UTF-8"><cr><meta name="cierport" content="width=device-width, initial-scal=1.0"><cr><meta http-equiv="X-UA-Compatible" content="IE=edge"><cr><title>Document</title><cr></head><cr><body><cr>hi i'm FAN<cr></body><cr></html><esc>o
 
-
-
+endfunc 
 "新建.md,.py,.sh文件，自动插入文件头 
 autocmd BufNewFile *.py exec ":call SetTitle()" 
 ""定义函数SetTitle，自动插入文件头 
@@ -176,6 +171,8 @@ Plugin 'iamcco/markdown-preview.nvim'
 
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
+
+Plugin 'boydos/emmet-vim'
 " 你的所有插件需要在下面这行之前
 call vundle#end()            " 必须
 filetype plugin indent on    " 必须 加载vim自带和插件相应的语法和文件类型相关脚本
@@ -191,7 +188,7 @@ let g:rainbow_active = 1 "0 if you want to enable it later via :RainbowToggle
 let g:ycm_key_invoke_completion = '<C-Q>'
 " 开启自动语义补全
 let g:ycm_semantic_triggers =  {
-\ 'c,cpp,python,java,go,erlang,perl': ['re!\w{2}'],
+\ 'c,cpp,python,java,go,erlang,perl,html': ['re!\w{2}'],
 \ 'cs,lua,javascript': ['re!\w{2}'],
 \ }
 " 更改补全面板的颜色 
@@ -209,6 +206,7 @@ let g:ycm_filetype_whitelist = {
 \ "sh":1,
 \ "zsh":1,
 \ "zimbu":1,
+\ "html":1,
 \ }          
 
 """"""""""""""""""""""""""""""""""""""""""""""""""
@@ -264,23 +262,26 @@ endfunction
 
 """"""""""""""""""""""""""""""""""""""""""""""""""
 """"""""""""""""""""""airline插件""""""""""""""""""""""
-set laststatus=2  "永远显示状态栏
-let g:airline_powerline_fonts = 1  " 支持 powerline 字体
-let g:airline#extensions#tabline#enabled = 1 
-let g:airline_theme='murmur'  " murmur配色不错
-
-if !exists('g:airline_symbols')
-let g:airline_symbols = {}
-endif
-let g:airline_left_sep = '>>'
-let g:airline_left_alt_sep = '>'
-let g:airline_right_sep = '<<'
-let g:airline_right_alt_sep = '<'
-let g:airline_symbols.linenr = '¶'
-let g:airline_symbols.branch = 'T'
+"set laststatus=2  "永远显示状态栏
+"let g:airline_powerline_fonts = 1  " 支持 powerline 字体
+"let g:airline#extensions#tabline#enabled = 1 
+"let g:airline_theme='murmur'  " murmur配色不错
+"
+"if !exists('g:airline_symbols')
+"let g:airline_symbols = {}
+"endif
+"let g:airline_left_sep = '>>'
+"let g:airline_left_alt_sep = '>'
+"let g:airline_right_sep = '<<'
+"let g:airline_right_alt_sep = '<'
+"let g:airline_symbols.linenr = '¶'
+"let g:airline_symbols.branch = 'T'
 
 """"""""""""""""""""""""""""""""""""""""""""""""""
 """"""""""""""""""""""vim-markdown插件""""""""""""""""""""""
 let g:vim_markdown_folding_disabled = 1     "关闭折叠
 let g:vim_markdown_strikethrough = 1        "增加删除线
 
+""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""emmet插件""""""""""""""""""""""
+let g:user_emmet_leader_key='<C-Z>'
